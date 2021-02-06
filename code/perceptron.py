@@ -35,11 +35,8 @@ def preprocess(data):
     data, noiseData = romoveNoise(np.array(data)) # 移除雜點
     data = changeLabel(np.array(data)) # 統一label
     np.random.shuffle(data) # 打亂data
-    # print('Random: ',data)
     train, test = data[:int(len(data)*2/3)], data[int(len(data)*2/3):] # 分2/3 teaing data，1/3 testing data
-    # train, test = np.array(data[:]), []
-    # print('Train: ',train)
-    # print('Test: ',test)
+
 
     if len(noiseData) == 0:
         return train, test, []
@@ -50,22 +47,16 @@ def preprocess(data):
 def romoveNoise(data):
     originalData = copy.copy(data)
     countLabel = Counter(data[:, -1]) # 計算label種類
-    # print('QQQQQQ', countLabel)
-    # print('Len: ',len(countLabel))
+
 
     if len(countLabel) > 2:
         most_common_words = [word for word, word_count in Counter(countLabel).most_common()[:-2:-1]] # 找出數量最少的label
-        # print(type(most_common_words)) # list
         float_lst = [int(float(x)) for x in most_common_words] # 要先轉float再轉int否則會報錯
 
         removeIdx = np.where(data[:, -1] == float_lst[0]) # 找出雜點index
-        print('Idx: ',removeIdx)
         noiseData = originalData[removeIdx,:]
-        # print('!!!!!!!!', noiseData)
         result = np.delete(data, removeIdx, 0) # 刪除雜點
-        # print('/////////////////////////////')
-        # print('After Remove: ',result)
-        # print('/////////////////////////////')
+
 
         return result,noiseData
 
@@ -75,9 +66,6 @@ def romoveNoise(data):
 # 統一label，原始label大的標為1，小的標為0
 def changeLabel(data):
     changedata = copy.copy(data)
-    # countLabel = Counter(changedata[:,-1])
-    # print('QQQQQQ',countLabel)
-    # print(data[:,-1])
     bigLabel = np.max(data[:,-1])
     bigIdx = np.where(data[:, -1] == bigLabel)
     print('bigIdx : ',bigIdx)
@@ -113,25 +101,18 @@ def multilayer_perceptron(train, test, learning_rate, iteration, progressbar):
     progressbar["value"] = currentValue
     progressbar["maximum"] = maxValue - 1
 
-    # learning_rate = 0.8
-    # weight = np.array([-1, 0, 1])
     weight_1 = np.round(np.random.rand(train.shape[1] - 1), 2) #隨機產生在[0,1)之間均勻分布的鍵結值
     weight_2 = np.round(np.random.rand(train.shape[1] - 1), 2)
     weight_3 = np.round(np.random.rand(train.shape[1] - 1), 2)
-    # print('Original Weight: ',weight_1)
 
     train_error_rate = 0
     test_error_rate = 0
 
     x_train = train[:, :train.shape[1]-1]
     y_train = train[:, -1]
-    # print('X_Train: ', x_train)
-    # print('Y_Train: ', y_train)
 
     x_test = test[:, :test.shape[1] - 1]
     y_test = test[:, -1]
-    # print('X_Test: ', x_test)
-    # print('Y_Test: ', y_test)
 
     for n in range(iteration):
         progressbar["value"] = n
@@ -152,8 +133,6 @@ def multilayer_perceptron(train, test, learning_rate, iteration, progressbar):
             z =  1 / (1 + math.exp(-gamma))
 
         predict = sgn(z)
-        # print('\npredict: ',predict)
-        # print('ans: ',y_train[i])
 
         if y_train[i] != predict:
             delta_3 = ( y_train[i] - z ) * z * ( 1 - z )
@@ -189,8 +168,6 @@ def multilayer_perceptron(train, test, learning_rate, iteration, progressbar):
 
         predict = sgn(z)
         test_prediction.append(predict)
-        # print('\npredict: ',predict)
-        # print('ans: ',y_test[i])
 
         if y_test[i]!=predict:
             test_error_rate = test_error_rate + 1
@@ -204,30 +181,8 @@ def multilayer_perceptron(train, test, learning_rate, iteration, progressbar):
     print('Correct Rate: ', test_accuracy)
     print("========================")
 
-
     return training_accuracy, test_accuracy, weight_1, weight_2, weight_3, RMSE
 
-    # y1_point = []
-    # y2_point = []
-    # z_point = []
-    # for i in range(train.shape[0]):
-    #     v1 = np.dot(weight_1, x_train[i])
-    #     y1 = 1 / (1 + math.exp(-v1))
-    #     y1_point = np.append(y1_point, y1)
-    #
-    #     v2 = np.dot(weight_2, x_train[i])
-    #     y2 = 1 / (1 + math.exp(-v2))
-    #     y2_point = np.append(y2_point, y2)
-    #
-    #     gamma = np.dot(weight_3, np.array([-1, v1, v2]))
-    #
-    #     if gamma < 0:
-    #         z = 1 - 1 / (1 + math.exp(gamma))
-    #     else:
-    #         z = 1 / (1 + math.exp(-gamma))
-    #     z_point = np.append(z_point, z)
-
-    # plotData_3D(train, y1_point, y2_point, z_point,weight_3)
 
 # 畫圖
 def plotData_3D(dataSet, y1_points, y2_points, z_points, weight):
@@ -246,9 +201,7 @@ def plotData_3D(dataSet, y1_points, y2_points, z_points, weight):
     X, Y = np.meshgrid(X, Y)
 
     H = (np.min(z_points)+np.max(z_points))/2
-    # Z = weight[1] * X + weight[2] * Y
     Z = ( (-1)*H - (weight[0] * X + weight[1] * Y) )/ weight[2]
-    # z = lambda x, y: (-clf.intercept_[0] - clf.coef_[0][0] * x - clf.coef_[0][1] * y) / clf.coef_[0][2]
 
     # Plot the surface.
     surf = ax.plot_surface(X, Y, Z, cmap=cm.Blues, linewidth=0, antialiased=False, alpha=0.3)
@@ -256,8 +209,6 @@ def plotData_3D(dataSet, y1_points, y2_points, z_points, weight):
     plt.show()
 
 def spaceTransform(data,weight_1,weight_2):
-    # y1_arr = [[] for _ in range(data.shape[0])]
-    # y2_arr = [[] for _ in range(data.shape[0])]
     x_data = data[:, :data.shape[1] - 1]
     y1_arr = []
     y2_arr = []
@@ -281,8 +232,6 @@ def plotData_2D(dataSet, weight_1, weight_2, weight_3, window, DataType, NoiseDa
     ax.set_title(DataType + 'dataset')
     plt.xlabel('Y1')
     plt.ylabel('Y2')
-    # plt.axis('equal')
-    # ax.set_aspect('equal', adjustable='box')
 
     # 畫training/testing data
     labels = dataSet[:, -1]
@@ -293,7 +242,6 @@ def plotData_2D(dataSet, weight_1, weight_2, weight_3, window, DataType, NoiseDa
     idx_2 = np.where(dataSet[:, -1] == 0)
     p2 = ax.scatter(y1_point[idx_2], y2_point[idx_2], marker='x', color='r', label=0, s=20)
 
-    # print(len(NoiseData))
     # 畫雜點
     if len(NoiseData) > 0:
         p3 = ax.scatter(NoiseData[:, :, 1], NoiseData[:, :, 2], marker='^', color='b', label='Noise', s=20) # NoiseData is 3d-array
@@ -301,7 +249,6 @@ def plotData_2D(dataSet, weight_1, weight_2, weight_3, window, DataType, NoiseDa
 
     # 畫分割線
     x = np.arange(np.min(dataSet[:,1]), np.max(dataSet[:,2]), 0.1)
-    # # y1_line, y2_line = spaceTransform(dataSet, weight_1, weight_2)
     if weight_3[2]==0:
         y = 0
     else:
@@ -340,10 +287,3 @@ def plotData_2D(dataSet, weight_1, weight_2, weight_3, window, DataType, NoiseDa
         toolbar = NavigationToolbar2Tk(canvas, window)
         toolbar.update()
         toolbar.place(x=900, y=10)
-
-
-
-# if __name__ == '__main__':
-    # data = readfile()
-    # train, test = preprocess(data)
-    # perceptron(train, test)
