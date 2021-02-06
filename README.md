@@ -23,16 +23,16 @@
     ![3](https://github.com/XinMiaoWang/Multilayer-Perceptron/blob/main/demo/3.png)  
       
   - 多層感知機設計  
-    步驟一：決定架構  
+    **步驟一：決定架構**  
     預設為二層，隱藏層神經元數目為2。  
       
     ![4](https://github.com/XinMiaoWang/Multilayer-Perceptron/blob/main/demo/4.png)  
 
-    步驟二：網路初始化  
+    **步驟二：網路初始化**  
     Weight的初始值為隨機產生，範圍在[0,1)之間。  
     ![5](https://github.com/XinMiaoWang/Multilayer-Perceptron/blob/main/demo/5.png)  
 
-    步驟三：前饋階段  
+    **步驟三：前饋階段**  
     - 計算公式：  
      ![6](https://github.com/XinMiaoWang/Multilayer-Perceptron/blob/main/demo/6.PNG)  
      ![7](https://github.com/XinMiaoWang/Multilayer-Perceptron/blob/main/demo/7.png)  
@@ -41,17 +41,17 @@
      ![8](https://github.com/XinMiaoWang/Multilayer-Perceptron/blob/main/demo/8.png)  
      ![9](https://github.com/XinMiaoWang/Multilayer-Perceptron/blob/main/demo/9.png)  
        
-    步驟四：倒傳遞階段  
+    **步驟四：倒傳遞階段**  
     - 如果第 j 個類神經元是輸出層的類神經元：  
      ![10](https://github.com/XinMiaoWang/Multilayer-Perceptron/blob/main/demo/10.PNG)  
     - 如果第 j 個類神經元是隱藏層的類神經元：  
      ![11](https://github.com/XinMiaoWang/Multilayer-Perceptron/blob/main/demo/11.PNG)  
 
-    步驟五：調整鍵結值向量  
+    **步驟五：調整鍵結值向量**  
     判斷資料是否有正確分類，若誤判就對Weight進行更新，根據以下原則來計算新的Weight：  
      ![12](https://github.com/XinMiaoWang/Multilayer-Perceptron/blob/main/demo/12.PNG)  
 
-    步驟六：收斂條件測試  
+    **步驟六：收斂條件測試**  
       
       
     步驟二到步驟五反覆執行，直到達到我們所設的收斂條件(疊代次數)才停止(每一次疊代訓練一筆資料)。  
