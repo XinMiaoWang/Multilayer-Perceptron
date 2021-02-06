@@ -53,10 +53,11 @@
 
     步驟六：收斂條件測試  
       
+      
     步驟二到步驟五反覆執行，直到達到我們所設的收斂條件(疊代次數)才停止(每一次疊代訓練一筆資料)。  
       
-    評估指標 – 均方根誤差(RMSE)  
-    - 計算公式：  
+  - 評估指標 – 均方根誤差(RMSE)  
+     - 計算公式：  
      ![13](https://github.com/XinMiaoWang/Multilayer-Perceptron/blob/main/demo/13.PNG)  
 
 * 繪圖  
